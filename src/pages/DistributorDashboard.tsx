@@ -1,0 +1,213 @@
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import DashboardHeader from "@/components/DashboardHeader";
+import CreateRetailerModal from "@/components/CreateRetailerModal";
+import { useToast } from "@/hooks/use-toast";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Badge } from "@/components/ui/badge";
+import { Store, TrendingUp, Activity } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+
+interface Retailer {
+  id: string;
+  name: string;
+  email: string;
+  phone: string;
+  status: "active" | "inactive";
+  sales: number;
+  createdAt: string;
+}
+
+const DistributorDashboard = () => {
+  const [modalOpen, setModalOpen] = useState(false);
+  const [walletBalance] = useState(85000);
+  const [retailers, setRetailers] = useState<Retailer[]>([]);
+  const navigate = useNavigate();
+  const { toast } = useToast();
+
+  useEffect(() => {
+    // Check authentication
+    const role = localStorage.getItem("userRole");
+    if (role !== "distributor") {
+      navigate("/login");
+      return;
+    }
+
+    // Fetch retailers
+    fetchRetailers();
+  }, [navigate]);
+
+  const fetchRetailers = async () => {
+    // Mock data
+    const mockRetailers: Retailer[] = [
+      {
+        id: "1",
+        name: "Suresh Store",
+        email: "suresh@store.com",
+        phone: "+91 98765 43220",
+        status: "active",
+        sales: 125000,
+        createdAt: "2024-02-10",
+      },
+      {
+        id: "2",
+        name: "Modern Electronics",
+        email: "modern@electronics.com",
+        phone: "+91 98765 43221",
+        status: "active",
+        sales: 98500,
+        createdAt: "2024-02-15",
+      },
+      {
+        id: "3",
+        name: "City Mart",
+        email: "city@mart.com",
+        phone: "+91 98765 43222",
+        status: "active",
+        sales: 87000,
+        createdAt: "2024-02-20",
+      },
+      {
+        id: "4",
+        name: "Quick Shop",
+        email: "quick@shop.com",
+        phone: "+91 98765 43223",
+        status: "inactive",
+        sales: 45000,
+        createdAt: "2024-03-01",
+      },
+    ];
+    setRetailers(mockRetailers);
+  };
+
+  const handleRequestFunds = () => {
+    toast({
+      title: "Fund request submitted",
+      description: "Your request for additional funds has been sent to master distributor.",
+    });
+  };
+
+  const stats = [
+    {
+      title: "Total Retailers",
+      value: retailers.length,
+      icon: Store,
+      color: "text-secondary",
+    },
+    {
+      title: "Active Retailers",
+      value: retailers.filter((r) => r.status === "active").length,
+      icon: Activity,
+      color: "text-success",
+    },
+    {
+      title: "Total Sales",
+      value: `₹${retailers.reduce((sum, r) => sum + r.sales, 0).toLocaleString("en-IN")}`,
+      icon: TrendingUp,
+      color: "text-primary",
+    },
+  ];
+
+  return (
+    <div className="min-h-screen bg-background">
+      <DashboardHeader
+        title="Distributor Panel"
+        walletBalance={walletBalance}
+        onCreateClick={() => setModalOpen(true)}
+        onRequestFunds={handleRequestFunds}
+        createButtonLabel="Create Retailer"
+      />
+
+      <main className="container mx-auto px-4 lg:px-8 py-8">
+        {/* Stats Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+          {stats.map((stat, index) => (
+            <Card key={index} className="border-0 shadow-md">
+              <CardHeader className="flex flex-row items-center justify-between pb-2">
+                <CardTitle className="text-sm font-medium text-muted-foreground">
+                  {stat.title}
+                </CardTitle>
+                <stat.icon className={`w-5 h-5 ${stat.color}`} />
+              </CardHeader>
+              <CardContent>
+                <div className="text-3xl font-heading font-bold">{stat.value}</div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+
+        {/* Retailers Table */}
+        <Card className="border-0 shadow-md">
+          <CardHeader>
+            <CardTitle className="text-xl font-heading">Your Retailers</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="rounded-lg border border-border overflow-hidden">
+              <Table>
+                <TableHeader>
+                  <TableRow className="bg-muted/50">
+                    <TableHead className="font-semibold">Name</TableHead>
+                    <TableHead className="font-semibold">Email</TableHead>
+                    <TableHead className="font-semibold">Phone</TableHead>
+                    <TableHead className="font-semibold">Sales</TableHead>
+                    <TableHead className="font-semibold">Status</TableHead>
+                    <TableHead className="font-semibold">Joined</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {retailers.map((retailer, index) => (
+                    <TableRow
+                      key={retailer.id}
+                      className={index % 2 === 0 ? "bg-background" : "bg-muted/30"}
+                    >
+                      <TableCell className="font-medium">{retailer.name}</TableCell>
+                      <TableCell className="text-muted-foreground">
+                        {retailer.email}
+                      </TableCell>
+                      <TableCell className="text-muted-foreground">
+                        {retailer.phone}
+                      </TableCell>
+                      <TableCell className="font-semibold text-primary">
+                        ₹{retailer.sales.toLocaleString("en-IN")}
+                      </TableCell>
+                      <TableCell>
+                        <Badge
+                          variant={retailer.status === "active" ? "default" : "secondary"}
+                          className={
+                            retailer.status === "active"
+                              ? "bg-success/10 text-success border-success"
+                              : ""
+                          }
+                        >
+                          {retailer.status}
+                        </Badge>
+                      </TableCell>
+                      <TableCell className="text-muted-foreground">
+                        {new Date(retailer.createdAt).toLocaleDateString("en-IN")}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+          </CardContent>
+        </Card>
+      </main>
+
+      <CreateRetailerModal
+        open={modalOpen}
+        onOpenChange={setModalOpen}
+        onSuccess={fetchRetailers}
+      />
+    </div>
+  );
+};
+
+export default DistributorDashboard;
