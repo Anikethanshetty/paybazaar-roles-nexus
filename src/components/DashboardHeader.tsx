@@ -37,8 +37,7 @@ const DashboardHeader = ({
           <div className="flex items-center gap-3 lg:absolute lg:left-1/2 lg:transform lg:-translate-x-1/2">
             <Button
               onClick={onCreateClick}
-              className="flex-1 lg:flex-none gradient-primary hover:opacity-90 transition-opacity shadow-md"
-              size="lg"
+              className="flex-1 lg:flex-none gradient-primary hover:opacity-90 transition-all hover:scale-105 shadow-lg text-sm lg:text-base px-4 lg:px-6 py-2 lg:py-2.5"
             >
               <Plus className="w-4 h-4 mr-2" />
               {createButtonLabel}
@@ -49,9 +48,7 @@ const DashboardHeader = ({
           <div className="flex items-center gap-3">
             <Button
               onClick={onRequestFunds}
-              variant="outline"
-              size="lg"
-              className="flex-1 lg:flex-none border-secondary text-secondary hover:bg-secondary hover:text-secondary-foreground"
+              className="flex-1 lg:flex-none bg-secondary hover:bg-secondary-hover text-secondary-foreground transition-all hover:scale-105 shadow-md text-sm lg:text-base px-4 lg:px-6 py-2 lg:py-2.5"
             >
               <DollarSign className="w-4 h-4 mr-2" />
               Request Funds

@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import DashboardHeader from "@/components/DashboardHeader";
 import CreateRetailerModal from "@/components/CreateRetailerModal";
-import { useToast } from "@/hooks/use-toast";
 import {
   Table,
   TableBody,
@@ -30,7 +29,6 @@ const DistributorDashboard = () => {
   const [walletBalance] = useState(85000);
   const [retailers, setRetailers] = useState<Retailer[]>([]);
   const navigate = useNavigate();
-  const { toast } = useToast();
 
   useEffect(() => {
     // Check authentication
@@ -88,10 +86,7 @@ const DistributorDashboard = () => {
   };
 
   const handleRequestFunds = () => {
-    toast({
-      title: "Fund request submitted",
-      description: "Your request for additional funds has been sent to master distributor.",
-    });
+    navigate("/request-fund");
   };
 
   const stats = [
