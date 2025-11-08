@@ -21,7 +21,9 @@ const App = () => (
           <Route path="/" element={<Navigate to="/login" replace />} />
           <Route path="/login" element={<Login />} />
           <Route path="/master" element={<MasterDashboard />} />
+          <Route path="/master/*" element={<MasterDashboard />} />
           <Route path="/distributor" element={<DistributorDashboard />} />
+          <Route path="/distributor/*" element={<DistributorDashboard />} />
           <Route path="/request-fund" element={<RequestFund />} />
           <Route path="*" element={<NotFound />} />
         </Routes>

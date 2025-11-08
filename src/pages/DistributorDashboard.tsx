@@ -1,7 +1,7 @@
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import DashboardHeader from "@/components/DashboardHeader";
+import { useState } from "react";
+import { DashboardLayout } from "@/components/DashboardLayout";
 import CreateRetailerModal from "@/components/CreateRetailerModal";
+import { useNavigate } from "react-router-dom";
 import {
   Table,
   TableBody,
@@ -26,68 +26,13 @@ interface Retailer {
 
 const DistributorDashboard = () => {
   const [modalOpen, setModalOpen] = useState(false);
-  const [walletBalance] = useState(85000);
-  const [retailers, setRetailers] = useState<Retailer[]>([]);
   const navigate = useNavigate();
-
-  useEffect(() => {
-    // Check authentication
-    const role = localStorage.getItem("userRole");
-    if (role !== "distributor") {
-      navigate("/login");
-      return;
-    }
-
-    // Fetch retailers
-    fetchRetailers();
-  }, [navigate]);
-
-  const fetchRetailers = async () => {
-    // Mock data
-    const mockRetailers: Retailer[] = [
-      {
-        id: "1",
-        name: "Suresh Store",
-        email: "suresh@store.com",
-        phone: "+91 98765 43220",
-        status: "active",
-        sales: 125000,
-        createdAt: "2024-02-10",
-      },
-      {
-        id: "2",
-        name: "Modern Electronics",
-        email: "modern@electronics.com",
-        phone: "+91 98765 43221",
-        status: "active",
-        sales: 98500,
-        createdAt: "2024-02-15",
-      },
-      {
-        id: "3",
-        name: "City Mart",
-        email: "city@mart.com",
-        phone: "+91 98765 43222",
-        status: "active",
-        sales: 87000,
-        createdAt: "2024-02-20",
-      },
-      {
-        id: "4",
-        name: "Quick Shop",
-        email: "quick@shop.com",
-        phone: "+91 98765 43223",
-        status: "inactive",
-        sales: 45000,
-        createdAt: "2024-03-01",
-      },
-    ];
-    setRetailers(mockRetailers);
-  };
-
-  const handleRequestFunds = () => {
-    navigate("/request-fund");
-  };
+  const [retailers] = useState<Retailer[]>([
+    { id: "1", name: "Suresh Store", email: "suresh@store.com", phone: "+91 98765 43220", status: "active", sales: 125000, createdAt: "2024-02-10" },
+    { id: "2", name: "Modern Electronics", email: "modern@electronics.com", phone: "+91 98765 43221", status: "active", sales: 98500, createdAt: "2024-02-15" },
+    { id: "3", name: "City Mart", email: "city@mart.com", phone: "+91 98765 43222", status: "active", sales: 87000, createdAt: "2024-02-20" },
+    { id: "4", name: "Quick Shop", email: "quick@shop.com", phone: "+91 98765 43223", status: "inactive", sales: 45000, createdAt: "2024-03-01" },
+  ]);
 
   const stats = [
     {
@@ -111,16 +56,8 @@ const DistributorDashboard = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-background">
-      <DashboardHeader
-        title="Distributor Panel"
-        walletBalance={walletBalance}
-        onCreateClick={() => setModalOpen(true)}
-        onRequestFunds={handleRequestFunds}
-        createButtonLabel="Create Retailer"
-      />
-
-      <main className="container mx-auto px-4 lg:px-8 py-8">
+    <DashboardLayout role="distributor" walletBalance={85000}>
+      <div className="space-y-6">
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           {stats.map((stat, index) => (
@@ -194,14 +131,10 @@ const DistributorDashboard = () => {
             </div>
           </CardContent>
         </Card>
-      </main>
+      </div>
 
-      <CreateRetailerModal
-        open={modalOpen}
-        onOpenChange={setModalOpen}
-        onSuccess={fetchRetailers}
-      />
-    </div>
+      <CreateRetailerModal open={modalOpen} onOpenChange={setModalOpen} onSuccess={() => {}} />
+    </DashboardLayout>
   );
 };
 

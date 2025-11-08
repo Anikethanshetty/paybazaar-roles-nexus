@@ -1,7 +1,7 @@
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import DashboardHeader from "@/components/DashboardHeader";
+import { useState } from "react";
+import { DashboardLayout } from "@/components/DashboardLayout";
 import CreateDistributorModal from "@/components/CreateDistributorModal";
+import { useNavigate } from "react-router-dom";
 import {
   Table,
   TableBody,
@@ -26,59 +26,13 @@ interface Distributor {
 
 const MasterDashboard = () => {
   const [modalOpen, setModalOpen] = useState(false);
-  const [walletBalance] = useState(250000);
-  const [distributors, setDistributors] = useState<Distributor[]>([]);
   const navigate = useNavigate();
+  const [distributors] = useState<Distributor[]>([
+    { id: "1", name: "Rajesh Kumar", email: "rajesh@example.com", phone: "+91 98765 43210", status: "active", balance: 45000, createdAt: "2024-01-15" },
+    { id: "2", name: "Priya Sharma", email: "priya@example.com", phone: "+91 98765 43211", status: "active", balance: 38500, createdAt: "2024-01-20" },
+    { id: "3", name: "Amit Patel", email: "amit@example.com", phone: "+91 98765 43212", status: "inactive", balance: 12000, createdAt: "2024-02-01" },
+  ]);
 
-  useEffect(() => {
-    // Check authentication
-    const role = localStorage.getItem("userRole");
-    if (role !== "master") {
-      navigate("/login");
-      return;
-    }
-
-    // Fetch distributors
-    fetchDistributors();
-  }, [navigate]);
-
-  const fetchDistributors = async () => {
-    // Mock data
-    const mockDistributors: Distributor[] = [
-      {
-        id: "1",
-        name: "Rajesh Kumar",
-        email: "rajesh@example.com",
-        phone: "+91 98765 43210",
-        status: "active",
-        balance: 45000,
-        createdAt: "2024-01-15",
-      },
-      {
-        id: "2",
-        name: "Priya Sharma",
-        email: "priya@example.com",
-        phone: "+91 98765 43211",
-        status: "active",
-        balance: 38500,
-        createdAt: "2024-01-20",
-      },
-      {
-        id: "3",
-        name: "Amit Patel",
-        email: "amit@example.com",
-        phone: "+91 98765 43212",
-        status: "inactive",
-        balance: 12000,
-        createdAt: "2024-02-01",
-      },
-    ];
-    setDistributors(mockDistributors);
-  };
-
-  const handleRequestFunds = () => {
-    navigate("/request-fund");
-  };
 
   const stats = [
     {
@@ -102,16 +56,8 @@ const MasterDashboard = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-background">
-      <DashboardHeader
-        title="Master Distributor Panel"
-        walletBalance={walletBalance}
-        onCreateClick={() => setModalOpen(true)}
-        onRequestFunds={handleRequestFunds}
-        createButtonLabel="Create Distributor"
-      />
-
-      <main className="container mx-auto px-4 lg:px-8 py-8">
+    <DashboardLayout role="master" walletBalance={250000}>
+      <div className="space-y-6">
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           {stats.map((stat, index) => (
@@ -187,14 +133,10 @@ const MasterDashboard = () => {
             </div>
           </CardContent>
         </Card>
-      </main>
+      </div>
 
-      <CreateDistributorModal
-        open={modalOpen}
-        onOpenChange={setModalOpen}
-        onSuccess={fetchDistributors}
-      />
-    </div>
+      <CreateDistributorModal open={modalOpen} onOpenChange={setModalOpen} onSuccess={() => {}} />
+    </DashboardLayout>
   );
 };
 
