@@ -8,6 +8,8 @@ import MasterDashboard from "./pages/MasterDashboard";
 import DistributorDashboard from "./pages/DistributorDashboard";
 import RequestFund from "./pages/RequestFund";
 import NotFound from "./pages/NotFound";
+import CreateRetailerPage from "./pages/CreateRetailer";
+import CreateDistributorPage from "./pages/CreateDistributor";
 
 const queryClient = new QueryClient();
 
@@ -23,6 +25,8 @@ const App = () => (
           <Route path="/master" element={<MasterDashboard />} />
           <Route path="/master/*" element={<MasterDashboard />} />
           <Route path="/distributor" element={<DistributorDashboard />} />
+          <Route path="/distributor/create" element={<CreateRetailerPage />} />
+          <Route path="/master/create" element={<CreateDistributorPage />} />
           <Route path="/distributor/*" element={<DistributorDashboard />} />
           <Route path="/request-fund" element={<RequestFund />} />
           <Route path="*" element={<NotFound />} />

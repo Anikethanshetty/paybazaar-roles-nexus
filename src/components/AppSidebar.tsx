@@ -23,18 +23,15 @@ export function AppSidebar({ role }: AppSidebarProps) {
 
   const masterItems = [
     { title: "Dashboard", url: "/master", icon: LayoutDashboard },
-    { title: "All Distributors", url: "/master/distributors", icon: Users },
     { title: "Create Distributor", url: "/master/create", icon: UserPlus },
-    { title: "Transactions", url: "/master/transactions", icon: Receipt },
-    { title: "Settings", url: "/master/settings", icon: Settings },
+    { title: "Request Funds", url: "/request-fund", icon: Receipt },
+
   ];
 
   const distributorItems = [
     { title: "Dashboard", url: "/distributor", icon: LayoutDashboard },
-    { title: "All Retailers", url: "/distributor/retailers", icon: Users },
     { title: "Create Retailer", url: "/distributor/create", icon: UserPlus },
-    { title: "Transactions", url: "/distributor/transactions", icon: Receipt },
-    { title: "Settings", url: "/distributor/settings", icon: Settings },
+    { title: "Request Funds", url: "/request-fund", icon: Receipt },
   ];
 
   const items = role === "master" ? masterItems : distributorItems;

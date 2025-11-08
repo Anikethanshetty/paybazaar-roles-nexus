@@ -28,10 +28,42 @@ const DistributorDashboard = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const navigate = useNavigate();
   const [retailers] = useState<Retailer[]>([
-    { id: "1", name: "Suresh Store", email: "suresh@store.com", phone: "+91 98765 43220", status: "active", sales: 125000, createdAt: "2024-02-10" },
-    { id: "2", name: "Modern Electronics", email: "modern@electronics.com", phone: "+91 98765 43221", status: "active", sales: 98500, createdAt: "2024-02-15" },
-    { id: "3", name: "City Mart", email: "city@mart.com", phone: "+91 98765 43222", status: "active", sales: 87000, createdAt: "2024-02-20" },
-    { id: "4", name: "Quick Shop", email: "quick@shop.com", phone: "+91 98765 43223", status: "inactive", sales: 45000, createdAt: "2024-03-01" },
+    {
+      id: "1",
+      name: "Suresh Store",
+      email: "suresh@store.com",
+      phone: "+91 98765 43220",
+      status: "active",
+      sales: 125000,
+      createdAt: "2024-02-10",
+    },
+    {
+      id: "2",
+      name: "Modern Electronics",
+      email: "modern@electronics.com",
+      phone: "+91 98765 43221",
+      status: "active",
+      sales: 98500,
+      createdAt: "2024-02-15",
+    },
+    {
+      id: "3",
+      name: "City Mart",
+      email: "city@mart.com",
+      phone: "+91 98765 43222",
+      status: "active",
+      sales: 87000,
+      createdAt: "2024-02-20",
+    },
+    {
+      id: "4",
+      name: "Quick Shop",
+      email: "quick@shop.com",
+      phone: "+91 98765 43223",
+      status: "inactive",
+      sales: 45000,
+      createdAt: "2024-03-01",
+    },
   ]);
 
   const stats = [
@@ -49,7 +81,9 @@ const DistributorDashboard = () => {
     },
     {
       title: "Total Sales",
-      value: `₹${retailers.reduce((sum, r) => sum + r.sales, 0).toLocaleString("en-IN")}`,
+      value: `₹${retailers
+        .reduce((sum, r) => sum + r.sales, 0)
+        .toLocaleString("en-IN")}`,
       icon: TrendingUp,
       color: "text-primary",
     },
@@ -69,7 +103,9 @@ const DistributorDashboard = () => {
                 <stat.icon className={`w-5 h-5 ${stat.color}`} />
               </CardHeader>
               <CardContent>
-                <div className="text-3xl font-heading font-bold">{stat.value}</div>
+                <div className="text-3xl font-heading font-bold">
+                  {stat.value}
+                </div>
               </CardContent>
             </Card>
           ))}
@@ -78,51 +114,57 @@ const DistributorDashboard = () => {
         {/* Retailers Table */}
         <Card className="border-0 shadow-md">
           <CardHeader>
-            <CardTitle className="text-xl font-heading">Your Retailers</CardTitle>
+            <CardTitle className="text-xl font-heading">
+              Your Retailers
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="rounded-lg border border-border overflow-hidden">
-              <Table>
+              <Table className="w-full border-separate border-spacing-y-1">
                 <TableHeader>
                   <TableRow className="bg-muted/50">
-                    <TableHead className="font-semibold">Name</TableHead>
-                    <TableHead className="font-semibold">Email</TableHead>
-                    <TableHead className="font-semibold">Phone</TableHead>
-                    <TableHead className="font-semibold">Sales</TableHead>
-                    <TableHead className="font-semibold">Status</TableHead>
-                    <TableHead className="font-semibold">Joined</TableHead>
+                    <TableHead className="font-semibold text-center">
+                      Name
+                    </TableHead>
+                    <TableHead className="font-semibold text-center">
+                      Email
+                    </TableHead>
+                    <TableHead className="font-semibold text-center">
+                      Phone
+                    </TableHead>
+                    <TableHead className="font-semibold text-center">
+                      Sales
+                    </TableHead>
+                    <TableHead className="font-semibold text-center">
+                      Joined
+                    </TableHead>
                   </TableRow>
                 </TableHeader>
+
                 <TableBody>
                   {retailers.map((retailer, index) => (
                     <TableRow
                       key={retailer.id}
-                      className={index % 2 === 0 ? "bg-background" : "bg-muted/30"}
+                      className={`${
+                        index % 2 === 0 ? "bg-background" : "bg-muted/30"
+                      } hover:bg-muted/50 transition-colors duration-200`}
                     >
-                      <TableCell className="font-medium">{retailer.name}</TableCell>
-                      <TableCell className="text-muted-foreground">
+                      <TableCell className="font-medium text-center py-3">
+                        {retailer.name}
+                      </TableCell>
+                      <TableCell className="text-muted-foreground text-center py-3">
                         {retailer.email}
                       </TableCell>
-                      <TableCell className="text-muted-foreground">
+                      <TableCell className="text-muted-foreground text-center py-3">
                         {retailer.phone}
                       </TableCell>
-                      <TableCell className="font-semibold text-primary">
+                      <TableCell className="font-semibold text-primary text-center py-3">
                         ₹{retailer.sales.toLocaleString("en-IN")}
                       </TableCell>
-                      <TableCell>
-                        <Badge
-                          variant={retailer.status === "active" ? "default" : "secondary"}
-                          className={
-                            retailer.status === "active"
-                              ? "bg-success/10 text-success border-success"
-                              : ""
-                          }
-                        >
-                          {retailer.status}
-                        </Badge>
-                      </TableCell>
-                      <TableCell className="text-muted-foreground">
-                        {new Date(retailer.createdAt).toLocaleDateString("en-IN")}
+                      <TableCell className="text-muted-foreground text-center py-3">
+                        {new Date(retailer.createdAt).toLocaleDateString(
+                          "en-IN"
+                        )}
                       </TableCell>
                     </TableRow>
                   ))}
@@ -133,7 +175,11 @@ const DistributorDashboard = () => {
         </Card>
       </div>
 
-      <CreateRetailerModal open={modalOpen} onOpenChange={setModalOpen} onSuccess={() => {}} />
+      {/* <CreateRetailerModal
+        open={modalOpen}
+        onOpenChange={setModalOpen}
+        onSuccess={() => {}}
+      /> */}
     </DashboardLayout>
   );
 };
