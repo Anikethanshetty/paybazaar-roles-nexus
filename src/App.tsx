@@ -10,6 +10,7 @@ import RequestFund from "./pages/RequestFund";
 import NotFound from "./pages/NotFound";
 import CreateRetailerPage from "./pages/CreateRetailer";
 import CreateDistributorPage from "./pages/CreateDistributor";
+import RequestFunds from "./pages/requestFunds";
 
 const queryClient = new QueryClient();
 
@@ -28,7 +29,7 @@ const App = () => (
           <Route path="/distributor/create" element={<CreateRetailerPage />} />
           <Route path="/master/create" element={<CreateDistributorPage />} />
           <Route path="/distributor/*" element={<DistributorDashboard />} />
-          <Route path="/request-fund" element={<RequestFund />} />
+          <Route path="/request-funds" element={<RequestFunds />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

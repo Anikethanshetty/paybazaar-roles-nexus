@@ -1,20 +1,20 @@
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { useToast } from "@/hooks/use-toast";
-import { Toaster } from "@/components/ui/toaster";
-import { useNavigate } from "react-router-dom";
-import { ArrowLeft } from "lucide-react";
-import { DashboardLayout } from "@/components/DashboardLayout";
+import { useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
+import * as z from "zod"
+import axios from "axios"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { useToast } from "@/hooks/use-toast"
+import { Toaster } from "@/components/ui/toaster"
+import { useNavigate } from "react-router-dom"
+import { DashboardLayout } from "@/components/DashboardLayout"
 import {
   Card,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
+} from "@/components/ui/card"
 
 const distributorSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters").max(100),
@@ -24,15 +24,30 @@ const distributorSchema = z.object({
     .min(6, "Password must be at least 6 characters")
     .max(100),
   phone: z.string().regex(/^\+?[1-9]\d{9,14}$/, "Invalid phone number"),
-});
+})
 
-type DistributorFormData = z.infer<typeof distributorSchema>;
+type DistributorFormData = z.infer<typeof distributorSchema>
 
 const CreateDistributorPage = () => {
-  const { toast } = useToast();
-  const navigate = useNavigate();
-  const role = localStorage.getItem("userRole") || "master";
-  const walletBalance = 100000; // mock balance
+  const { toast } = useToast()
+  const navigate = useNavigate()
+  const role = localStorage.getItem("userRole") || "master"
+  const walletBalance = 100000 // mock
+
+  // Decode admin & master_distributor IDs from token
+  const token = localStorage.getItem("authToken")
+  let admin_id = ""
+  let master_distributor_id = ""
+
+  if (token) {
+    try {
+      const decoded = JSON.parse(atob(token.split(".")[1])) // decode JWT payload
+      admin_id = decoded?.data?.admin_id || ""
+      master_distributor_id = decoded?.data?.master_distributor_id || ""
+    } catch (e) {
+      console.error("Error decoding token:", e)
+    }
+  }
 
   const {
     register,
@@ -41,27 +56,62 @@ const CreateDistributorPage = () => {
     formState: { errors, isSubmitting },
   } = useForm<DistributorFormData>({
     resolver: zodResolver(distributorSchema),
-  });
+  })
 
   const onSubmit = async (data: DistributorFormData) => {
-    try {
-      // Simulated API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-
+    if (!admin_id || !master_distributor_id) {
       toast({
-        title: "Distributor created successfully",
-        description: `${data.name} has been added to your network.`,
-      });
-
-      reset();
-    } catch (error) {
-      toast({
-        title: "Failed to create distributor",
-        description: "Please try again later.",
+        title: "Invalid Session",
+        description: "Missing required authentication info. Please log in again.",
         variant: "destructive",
-      });
+      })
+      navigate("/")
+      return
     }
-  };
+
+    try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_API_BASE_URL}/md/create/distributor`,
+        {
+          admin_id,
+          master_distributor_id,
+          distributor_name: data.name,
+          distributor_email: data.email,
+          distributor_password: data.password,
+          distributor_phone: data.phone,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      )
+
+      const res = response.data
+
+      if (res.status === "success") {
+        toast({
+          title: "Distributor Created",
+          description: res.message || `${data.name} added successfully.`,
+        })
+        reset()
+      } else {
+        toast({
+          title: "Creation Failed",
+          description: res.message || "Something went wrong.",
+          variant: "destructive",
+        })
+      }
+    } catch (error: any) {
+      console.error("Error creating distributor:", error)
+      toast({
+        title: "Network Error",
+        description: error.response?.data?.message || "Please try again later.",
+        variant: "destructive",
+      })
+    }
+  }
 
   return (
     <DashboardLayout role={role} walletBalance={walletBalance}>
@@ -77,7 +127,6 @@ const CreateDistributorPage = () => {
               </div>
             </div>
           </CardHeader>
-       
 
           {/* Form */}
           <form
@@ -93,9 +142,7 @@ const CreateDistributorPage = () => {
                 className="h-11"
               />
               {errors.name && (
-                <p className="text-sm text-destructive">
-                  {errors.name.message}
-                </p>
+                <p className="text-sm text-destructive">{errors.name.message}</p>
               )}
             </div>
 
@@ -109,9 +156,7 @@ const CreateDistributorPage = () => {
                 className="h-11"
               />
               {errors.email && (
-                <p className="text-sm text-destructive">
-                  {errors.email.message}
-                </p>
+                <p className="text-sm text-destructive">{errors.email.message}</p>
               )}
             </div>
 
@@ -141,9 +186,7 @@ const CreateDistributorPage = () => {
                 className="h-11"
               />
               {errors.phone && (
-                <p className="text-sm text-destructive">
-                  {errors.phone.message}
-                </p>
+                <p className="text-sm text-destructive">{errors.phone.message}</p>
               )}
             </div>
 
@@ -171,7 +214,7 @@ const CreateDistributorPage = () => {
         <Toaster />
       </div>
     </DashboardLayout>
-  );
-};
+  )
+}
 
-export default CreateDistributorPage;
+export default CreateDistributorPage

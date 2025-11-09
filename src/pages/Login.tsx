@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
+import axios from "axios";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -21,12 +22,7 @@ import {
   MapPin,
 } from "lucide-react";
 import paybazarLogo from "@/assets/paybazar-logo.png";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 const loginSchema = z.object({
   email: z.string().email("Invalid email address"),
@@ -59,22 +55,57 @@ const Login = () => {
   const onSubmit = async (data: LoginFormData) => {
     setIsLoading(true);
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      const baseUrl =
+        import.meta.env.VITE_API_BASE_URL || "http://64.227.165.232:8080";
 
-      localStorage.setItem("authToken", "mock-jwt-token");
-      localStorage.setItem("userRole", data.role);
-      localStorage.setItem("userEmail", data.email);
+      // Endpoints (adjust distributorEndpoint if your API uses a different path)
+      const masterEndpoint = `${baseUrl}/md/login`;
+      const distributorEndpoint = `${baseUrl}/distributor/login`; // change to `${baseUrl}/distributor/login` if needed
 
+      const endpoint =
+        data.role === "master" ? masterEndpoint : distributorEndpoint;
+
+      const payload =
+        data.role === "master"
+          ? {
+              master_distributor_email: data.email,
+              master_distributor_password: data.password,
+            }
+          : {
+              // if your distributor API expects same keys as master, keep these;
+              // otherwise update to distributor_email / distributor_password
+              distributor_email: data.email,
+              distributor_password: data.password,
+            };
+
+      const response = await axios.post(endpoint, payload);
+      const resData = response.data;
+
+      if (resData?.status === "success" && resData?.data?.token) {
+        // save token & user info for later API calls
+        localStorage.setItem("authToken", resData.data.token);
+        localStorage.setItem("userRole", data.role);
+        localStorage.setItem("userEmail", data.email);
+
+        toast({
+          title: "Login successful",
+          description: "Welcome back!",
+        });
+
+        // redirect based on role (change routes to your app routes)
+        navigate(data.role === "master" ? "/master" : "/distributor");
+      } else {
+        throw new Error(resData?.message || "Invalid credentials");
+      }
+    } catch (error: any) {
+      console.error("Login Error:", error);
+      const message =
+        error.response?.data?.message ||
+        error.message ||
+        "Login failed. Please try again.";
       toast({
-        title: "Login successful",
-        description: `Welcome back!`,
-      });
-
-      navigate(data.role === "master" ? "/master" : "/distributor");
-    } catch (error) {
-      toast({
-        title: "Login failed",
-        description: "Invalid credentials. Please try again.",
+        title: "Login Failed",
+        description: message,
         variant: "destructive",
       });
     } finally {
@@ -84,7 +115,7 @@ const Login = () => {
 
   return (
     <div className="h-screen w-screen overflow-hidden grid grid-cols-1 md:grid-cols-2">
-      {/* Left Side */}
+      {/* LEFT SIDE */}
       <div className="hidden md:flex flex-col justify-center items-center bg-[#0d3154] px-8 text-white">
         <div className="flex flex-col items-center max-w-md text-center">
           <img
@@ -123,19 +154,23 @@ const Login = () => {
                 <Phone className="w-4 h-4 text-[#0d3154]" /> +91 9319187762
               </p>
               <p className="flex items-start gap-2">
-                <MapPin className="w-4 h-4 text-[#0d3154] mt-1" />
-                Paybazaar Technologies Pvt Ltd, Office No-304, Plot 2, Delhi
+                <MapPin className="w-4 h-4 text-[#0d3154] mt-1" /> Paybazaar
+                Technologies Pvt Ltd, Office No-304, Plot 2, Delhi
               </p>
             </CardContent>
           </Card>
         </div>
       </div>
 
-      {/* Right Side */}
+      {/* RIGHT SIDE */}
       <div className="flex items-center justify-center bg-background p-6">
         <div className="w-full max-w-sm">
           <div className="text-center mb-6 lg:hidden">
-            <img src={paybazarLogo} alt="PayBazaar" className="h-8 mx-auto mb-3" />
+            <img
+              src={paybazarLogo}
+              alt="PayBazaar"
+              className="h-8 mx-auto mb-3"
+            />
           </div>
 
           <div className="mb-6 text-center">
@@ -161,7 +196,9 @@ const Login = () => {
                   className="h-10"
                 />
                 {errors.email && (
-                  <p className="text-xs text-destructive">{errors.email.message}</p>
+                  <p className="text-xs text-destructive">
+                    {errors.email.message}
+                  </p>
                 )}
               </div>
 
@@ -214,9 +251,11 @@ const Login = () => {
                       htmlFor="master"
                       className="flex items-center gap-2 cursor-pointer flex-1 text-sm"
                     >
-                      <ShieldCheck className="w-4 h-4 text-primary" /> Master Distributor
+                      <ShieldCheck className="w-4 h-4 text-primary" /> Master
+                      Distributor
                     </Label>
                   </div>
+
                   <div
                     className={`flex items-center gap-3 p-3 rounded-lg border ${
                       selectedRole === "distributor"
@@ -235,7 +274,9 @@ const Login = () => {
                   </div>
                 </RadioGroup>
                 {errors.role && (
-                  <p className="text-xs text-destructive">{errors.role.message}</p>
+                  <p className="text-xs text-destructive">
+                    {errors.role.message}
+                  </p>
                 )}
               </div>
 

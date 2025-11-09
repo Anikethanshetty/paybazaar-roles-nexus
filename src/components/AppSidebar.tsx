@@ -28,13 +28,13 @@ export function AppSidebar({ role }: AppSidebarProps) {
   const masterItems = [
     { title: "Dashboard", href: "/master", icon: LayoutDashboard },
     { title: "Create Distributor", href: "/master/create", icon: UserPlus },
-    { title: "Request Funds", href: "/request-fund", icon: Receipt },
+    { title: "Request Funds", href: "/request-funds", icon: Receipt },
   ]
 
   const distributorItems = [
     { title: "Dashboard", href: "/distributor", icon: LayoutDashboard },
     { title: "Create Retailer", href: "/distributor/create", icon: UserPlus },
-    { title: "Request Funds", href: "/request-fund", icon: Receipt },
+    { title: "Request Funds", href: "/request-funds", icon: Receipt },
   ]
 
   const navItems = role === "master" ? masterItems : distributorItems
