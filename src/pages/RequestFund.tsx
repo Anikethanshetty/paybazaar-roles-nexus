@@ -47,9 +47,7 @@ const RequestFund = () => {
         <Card className="border-0 shadow-lg">
           <CardHeader className="gradient-primary text-primary-foreground rounded-t-xl">
             <div className="flex items-center gap-3">
-              <div className="w-12 h-12 rounded-full bg-background/20 flex items-center justify-center">
-                <DollarSign className="w-6 h-6" />
-              </div>
+              
               <div>
                 <CardTitle className="text-xl">Fund Request Form</CardTitle>
                 <CardDescription className="text-primary-foreground/80">
@@ -91,35 +89,6 @@ const RequestFund = () => {
                 />
               </div>
 
-              <div className="bg-muted/50 border border-border rounded-lg p-4">
-                <h3 className="font-semibold mb-2 text-sm">Request Summary</h3>
-                <div className="space-y-1 text-sm">
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">Current Balance:</span>
-                    <span className="font-semibold">
-                      ₹{walletBalance.toLocaleString("en-IN")}
-                    </span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">Requested Amount:</span>
-                    <span className="font-semibold text-primary">
-                      {amount
-                        ? `₹${parseFloat(amount).toLocaleString("en-IN")}`
-                        : "₹0"}
-                    </span>
-                  </div>
-                  <div className="flex justify-between pt-2 border-t border-border">
-                    <span className="font-semibold">
-                      Balance After Approval:
-                    </span>
-                    <span className="font-bold text-success">
-                      ₹{(walletBalance + (parseFloat(amount) || 0)).toLocaleString(
-                        "en-IN"
-                      )}
-                    </span>
-                  </div>
-                </div>
-              </div>
 
               <div className="flex gap-3">
                 <Button

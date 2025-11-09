@@ -8,8 +8,25 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useToast } from "@/hooks/use-toast";
-import { Wallet, ShieldCheck, Eye, EyeOff, Clock, Headphones } from "lucide-react";
+import {
+  Wallet,
+  ShieldCheck,
+  Eye,
+  EyeOff,
+  Clock,
+  Headphones,
+  Building2,
+  Mail,
+  Phone,
+  MapPin,
+} from "lucide-react";
 import paybazarLogo from "@/assets/paybazar-logo.png";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
 const loginSchema = z.object({
   email: z.string().email("Invalid email address"),
@@ -41,7 +58,6 @@ const Login = () => {
 
   const onSubmit = async (data: LoginFormData) => {
     setIsLoading(true);
-
     try {
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
@@ -67,199 +83,174 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex">
-      {/* Left Side - Brand Section */}
-      <div className="hidden lg:flex lg:w-1/2 gradient-dark relative overflow-hidden">
-        <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48cGF0dGVybiBpZD0iZ3JpZCIgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiBwYXR0ZXJuVW5pdHM9InVzZXJTcGFjZU9uVXNlIj48cGF0aCBkPSJNIDQwIDAgTCAwIDAgMCA0MCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJyZ2JhKDI1NSwyNTUsMjU1LDAuMDMpIiBzdHJva2Utd2lkdGg9IjEiLz48L3BhdHRlcm4+PC9kZWZzPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JpZCkiLz48L3N2Zz4=')] opacity-30"></div>
-        
-        <div className="relative z-10 flex flex-col justify-between p-12 text-white w-full">
-          <div>
-            <img src={paybazarLogo} alt="PayBazaar" className="h-12 mb-8" />
-            <h1 className="text-5xl font-heading font-bold mb-6 leading-tight">
-              PayBazaar: Secure & Reliable<br />Payment Service
-            </h1>
-            <p className="text-lg text-white/80 max-w-lg leading-relaxed">
-              At PAYBAZAAR, we are more than just a financial institution; we are a 
-              catalyst for inclusive growth and empowerment. We harness technology 
-              to democratize financial services, making them reachable to every 
-              corner of the nation.
-            </p>
-          </div>
+    <div className="h-screen w-screen overflow-hidden grid grid-cols-1 md:grid-cols-2">
+      {/* Left Side */}
+      <div className="hidden md:flex flex-col justify-center items-center bg-[#0d3154] px-8 text-white">
+        <div className="flex flex-col items-center max-w-md text-center">
+          <img
+            src="/login-page.png"
+            alt="PayBazaar Illustration"
+            className="w-48 h-44 object-contain"
+          />
+          <h2 className="text-2xl font-bold mt-6">
+            PayBazaar: Secure & Reliable Payments
+          </h2>
+          <p className="text-slate-200 text-xs mt-2 leading-relaxed">
+            PAYBAZAAR empowers inclusive financial growth through technology,
+            reaching every corner of the nation.
+          </p>
 
-          <div className="space-y-6">
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-xl bg-white/10 backdrop-blur-sm flex items-center justify-center">
-                <Clock className="w-6 h-6" />
-              </div>
-              <div>
-                <p className="font-semibold">Quick settlement in 1 hour</p>
-                <p className="text-sm text-white/70">Fast and reliable transactions</p>
-              </div>
-            </div>
-            
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-xl bg-white/10 backdrop-blur-sm flex items-center justify-center">
-                <Headphones className="w-6 h-6" />
-              </div>
-              <div>
-                <p className="font-semibold">24/7 Available</p>
-                <p className="text-sm text-white/70">Round the clock support</p>
-              </div>
-            </div>
+          <ul className="flex justify-center gap-6 text-xs text-slate-200 mt-4">
+            <li className="flex items-center gap-1">
+              <Clock className="w-4 h-4 text-white" /> 1-hour settlements
+            </li>
+            <li className="flex items-center gap-1">
+              <Headphones className="w-4 h-4 text-white" /> 24/7 Support
+            </li>
+          </ul>
 
-            <div className="mt-8 p-6 rounded-2xl bg-white/10 backdrop-blur-sm border border-white/20">
-              <h3 className="font-semibold mb-4 flex items-center gap-2">
-                <ShieldCheck className="w-5 h-5" />
-                Company Info
-              </h3>
-              <div className="space-y-2 text-sm text-white/80">
-                <p>📧 info@paybazaar.in</p>
-                <p>📞 +91 9319187762</p>
-                <p>📍 Paybazaar Technologies Pvt Ltd, Office No-304, Plot No-2 T/F Netaji Subhash Marg, Delhi</p>
-              </div>
-            </div>
-          </div>
+          <Card className="w-full shadow-lg border-0 rounded-xl bg-white/90 backdrop-blur-md mt-8">
+            <CardHeader>
+              <CardTitle className="text-base font-bold text-[#0d3154] flex items-center gap-2">
+                <Building2 className="w-5 h-5 text-[#0d3154]" /> Company Info
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-2 text-xs text-slate-700">
+              <p className="flex items-center gap-2">
+                <Mail className="w-4 h-4 text-[#0d3154]" /> info@paybazaar.in
+              </p>
+              <p className="flex items-center gap-2">
+                <Phone className="w-4 h-4 text-[#0d3154]" /> +91 9319187762
+              </p>
+              <p className="flex items-start gap-2">
+                <MapPin className="w-4 h-4 text-[#0d3154] mt-1" />
+                Paybazaar Technologies Pvt Ltd, Office No-304, Plot 2, Delhi
+              </p>
+            </CardContent>
+          </Card>
         </div>
       </div>
 
-      {/* Right Side - Login Form */}
-      <div className="flex-1 flex items-center justify-center p-8 bg-background">
-        <div className="w-full max-w-md animate-fade-in">
-          <div className="text-center mb-8 lg:hidden">
-            <img src={paybazarLogo} alt="PayBazaar" className="h-10 mx-auto mb-4" />
+      {/* Right Side */}
+      <div className="flex items-center justify-center bg-background p-6">
+        <div className="w-full max-w-sm">
+          <div className="text-center mb-6 lg:hidden">
+            <img src={paybazarLogo} alt="PayBazaar" className="h-8 mx-auto mb-3" />
           </div>
 
-          <div className="mb-8">
-            <h2 className="text-3xl font-heading font-bold text-foreground mb-2">
+          <div className="mb-6 text-center">
+            <h2 className="text-2xl font-bold text-foreground">
               Welcome to PayBazaar!
             </h2>
-            <p className="text-muted-foreground">
+            <p className="text-sm text-muted-foreground">
               Sign in to manage your payments
             </p>
           </div>
 
-          <div className="bg-card rounded-2xl shadow-xl border p-8">
-            <h3 className="text-2xl font-semibold mb-6">Sign In</h3>
-            <p className="text-sm text-muted-foreground mb-6">
-              Enter your email and password to continue
-            </p>
+          <div className="bg-card rounded-2xl shadow-xl border p-6">
+            <h3 className="text-xl font-semibold mb-4">Sign In</h3>
 
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
-              <div className="space-y-2">
-                <Label htmlFor="email" className="text-sm font-medium">
-                  Email Address
-                </Label>
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+              <div className="space-y-1">
+                <Label htmlFor="email">Email</Label>
                 <Input
                   id="email"
                   type="email"
                   placeholder="Enter your email"
                   {...register("email")}
-                  className="h-11 bg-input border-border"
+                  className="h-10"
                 />
                 {errors.email && (
-                  <p className="text-sm text-destructive">{errors.email.message}</p>
+                  <p className="text-xs text-destructive">{errors.email.message}</p>
                 )}
               </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="password" className="text-sm font-medium">
-                  Password
-                </Label>
+              <div className="space-y-1">
+                <Label htmlFor="password">Password</Label>
                 <div className="relative">
                   <Input
                     id="password"
                     type={showPassword ? "text" : "password"}
                     placeholder="Enter your password"
                     {...register("password")}
-                    className="h-11 bg-input border-border pr-10"
+                    className="h-10 pr-10"
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                    className="absolute right-3 top-1/2 -translate-y-1/2"
                   >
-                    {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                    {showPassword ? (
+                      <EyeOff className="w-4 h-4" />
+                    ) : (
+                      <Eye className="w-4 h-4" />
+                    )}
                   </button>
                 </div>
                 {errors.password && (
-                  <p className="text-sm text-destructive">{errors.password.message}</p>
+                  <p className="text-xs text-destructive">
+                    {errors.password.message}
+                  </p>
                 )}
               </div>
 
-              <div className="space-y-3">
-                <Label className="text-sm font-medium">Select Role</Label>
+              <div className="space-y-2">
+                <Label>Select Role</Label>
                 <RadioGroup
-                  onValueChange={(value) => setValue("role", value as "master" | "distributor")}
-                  className="space-y-3"
+                  onValueChange={(value) =>
+                    setValue("role", value as "master" | "distributor")
+                  }
                 >
                   <div
-                    className={`flex items-center space-x-3 p-4 rounded-xl border-2 transition-all cursor-pointer hover-glow ${
+                    className={`flex items-center gap-3 p-3 rounded-lg border ${
                       selectedRole === "master"
-                        ? "border-primary bg-accent/50"
-                        : "border-border hover:border-primary/40"
+                        ? "border-primary bg-accent/30"
+                        : "border-border"
                     }`}
                     onClick={() => setValue("role", "master")}
                   >
                     <RadioGroupItem value="master" id="master" />
                     <Label
                       htmlFor="master"
-                      className="flex items-center gap-3 cursor-pointer flex-1"
+                      className="flex items-center gap-2 cursor-pointer flex-1 text-sm"
                     >
-                      <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
-                        <ShieldCheck className="w-5 h-5 text-primary" />
-                      </div>
-                      <div>
-                        <div className="font-semibold text-foreground">Master Distributor</div>
-                        <div className="text-xs text-muted-foreground">
-                          Manage distributors and operations
-                        </div>
-                      </div>
+                      <ShieldCheck className="w-4 h-4 text-primary" /> Master Distributor
                     </Label>
                   </div>
-
                   <div
-                    className={`flex items-center space-x-3 p-4 rounded-xl border-2 transition-all cursor-pointer hover-glow ${
+                    className={`flex items-center gap-3 p-3 rounded-lg border ${
                       selectedRole === "distributor"
-                        ? "border-primary bg-accent/50"
-                        : "border-border hover:border-primary/40"
+                        ? "border-primary bg-accent/30"
+                        : "border-border"
                     }`}
                     onClick={() => setValue("role", "distributor")}
                   >
                     <RadioGroupItem value="distributor" id="distributor" />
                     <Label
                       htmlFor="distributor"
-                      className="flex items-center gap-3 cursor-pointer flex-1"
+                      className="flex items-center gap-2 cursor-pointer flex-1 text-sm"
                     >
-                      <div className="w-10 h-10 rounded-lg bg-secondary/10 flex items-center justify-center">
-                        <Wallet className="w-5 h-5 text-secondary" />
-                      </div>
-                      <div>
-                        <div className="font-semibold text-foreground">Distributor</div>
-                        <div className="text-xs text-muted-foreground">
-                          Manage retailers and sales
-                        </div>
-                      </div>
+                      <Wallet className="w-4 h-4 text-secondary" /> Distributor
                     </Label>
                   </div>
                 </RadioGroup>
                 {errors.role && (
-                  <p className="text-sm text-destructive">{errors.role.message}</p>
+                  <p className="text-xs text-destructive">{errors.role.message}</p>
                 )}
               </div>
 
-              <div className="flex items-center justify-between text-sm">
-                <label className="flex items-center gap-2 cursor-pointer">
-                  <input type="checkbox" className="rounded border-border" />
-                  <span className="text-muted-foreground">Remember me</span>
+              <div className="flex items-center justify-between text-xs">
+                <label className="flex items-center gap-2">
+                  <input type="checkbox" /> Remember me
                 </label>
-                <a href="#" className="text-primary hover:underline font-medium">
+                <a href="#" className="text-primary hover:underline">
                   Forgot password?
                 </a>
               </div>
 
               <Button
                 type="submit"
-                className="w-full h-12 gradient-primary hover:opacity-90 transition-opacity font-semibold text-base shadow-lg"
+                className="w-full h-10 font-medium"
                 disabled={isLoading}
               >
                 {isLoading ? "Signing in..." : "Sign In"}

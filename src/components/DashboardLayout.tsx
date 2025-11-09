@@ -69,11 +69,7 @@ export function DashboardLayout({ children, role, walletBalance = 50000 }: Dashb
                   </span>
                 </div>
 
-                {/* Notifications */}
-                <Button variant="ghost" size="icon" className="relative rounded-lg">
-                  <Bell className="w-5 h-5" />
-                  <span className="absolute top-1 right-1 w-2 h-2 bg-destructive rounded-full"></span>
-                </Button>
+              
 
                 {/* User Menu */}
                 <DropdownMenu>
@@ -94,9 +90,7 @@ export function DashboardLayout({ children, role, walletBalance = 50000 }: Dashb
                       <Wallet className="w-4 h-4 mr-2" />
                       Wallet: ₹{walletBalance.toLocaleString()}
                     </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => navigate(`/${role}/settings`)}>
-                      Settings
-                    </DropdownMenuItem>
+               
                     <DropdownMenuSeparator />
                     <DropdownMenuItem onClick={handleLogout} className="text-destructive">
                       <LogOut className="w-4 h-4 mr-2" />

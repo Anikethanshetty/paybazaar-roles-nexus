@@ -1,5 +1,7 @@
-import { LayoutDashboard, Users, UserPlus, Receipt, Settings, ChevronRight } from "lucide-react";
-import { NavLink } from "@/components/NavLink";
+"use client"
+
+import { LayoutDashboard, UserPlus, Receipt, Users, BarChart3, Settings } from "lucide-react"
+import { NavLink, useLocation } from "react-router-dom"
 import {
   Sidebar,
   SidebarContent,
@@ -7,80 +9,113 @@ import {
   SidebarGroupContent,
   SidebarGroupLabel,
   SidebarMenu,
-  SidebarMenuButton,
   SidebarMenuItem,
-  useSidebar,
-} from "@/components/ui/sidebar";
-import paybazarLogo from "@/assets/paybazar-logo.png";
+  useSidebar
+} from "@/components/ui/sidebar"
+import paybazarLogo from "@/assets/paybazar-logo.png"
 
 interface AppSidebarProps {
-  role: "master" | "distributor";
+  role: "master" | "distributor"
 }
 
 export function AppSidebar({ role }: AppSidebarProps) {
-  const { state } = useSidebar();
-  const isCollapsed = state === "collapsed";
+  const { state } = useSidebar()
+  const location = useLocation()
+  const isCollapsed = state === "collapsed"
+  const currentPath = location.pathname
 
+  // Navigation Items
   const masterItems = [
-    { title: "Dashboard", url: "/master", icon: LayoutDashboard },
-    { title: "Create Distributor", url: "/master/create", icon: UserPlus },
-    { title: "Request Funds", url: "/request-fund", icon: Receipt },
-
-  ];
+    { title: "Dashboard", href: "/master", icon: LayoutDashboard },
+    { title: "Create Distributor", href: "/master/create", icon: UserPlus },
+    { title: "Request Funds", href: "/request-fund", icon: Receipt },
+  ]
 
   const distributorItems = [
-    { title: "Dashboard", url: "/distributor", icon: LayoutDashboard },
-    { title: "Create Retailer", url: "/distributor/create", icon: UserPlus },
-    { title: "Request Funds", url: "/request-fund", icon: Receipt },
-  ];
+    { title: "Dashboard", href: "/distributor", icon: LayoutDashboard },
+    { title: "Create Retailer", href: "/distributor/create", icon: UserPlus },
+    { title: "Request Funds", href: "/request-fund", icon: Receipt },
+  ]
 
-  const items = role === "master" ? masterItems : distributorItems;
+  const navItems = role === "master" ? masterItems : distributorItems
+
+  // Active link styling — same glow & color tone as retailer sidebar
+  const getNavClassName = ({ isActive }: { isActive: boolean }) =>
+    `flex items-center gap-3 rounded-md px-2.5 py-2 text-sm transition-all duration-200 ${
+      isActive
+        ? "border border-white text-white font-semibold shadow-[0_4px_12px_rgba(7,92,137,0.3)]"
+        : "text-[hsl(var(--sidebar-foreground))]hover:border hover:border-white"
+    }`
 
   return (
-    <Sidebar className={isCollapsed ? "w-16" : "w-64"} collapsible="icon">
-      <SidebarContent className="bg-sidebar-background border-r border-sidebar-border">
+    <Sidebar className="border-r border-[hsl(var(--sidebar-border))]" collapsible="icon">
+      <SidebarContent className="bg-[hsl(var(--sidebar-background))] text-[hsl(var(--sidebar-foreground))] transition-all duration-300">
+        
         {/* Logo Section */}
-        <div className={`p-4 border-b border-sidebar-border ${isCollapsed ? "px-2" : ""}`}>
-          <div className="flex items-center gap-3">
-            <img 
-              src={paybazarLogo} 
-              alt="PayBazaar" 
-              className={isCollapsed ? "h-8" : "h-8"}
-            />
-            {!isCollapsed && (
-              <span className="font-heading font-bold text-lg text-sidebar-foreground">
-                PayBazaar
-              </span>
-            )}
-          </div>
-        </div>
-
         <SidebarGroup>
-          <SidebarGroupLabel className={isCollapsed ? "sr-only" : ""}>
-            {role === "master" ? "Master Controls" : "Distributor Controls"}
+          <div className="flex h-16 items-center px-4 border-b border-[hsl(var(--sidebar-border))]">
+            <div className="flex items-center gap-3">
+              <img
+                src={"/paybazaar-logo.png"}
+                alt="PayBazaar"
+                className="h-8 w-8 shrink-0 drop-shadow-md"
+              />
+              {!isCollapsed && (
+                <span className="text-lg font-semibold text-white tracking-wide">
+                  PayBazaar
+                </span>
+              )}
+            </div>
+          </div>
+        </SidebarGroup>
+
+        {/* Navigation Section */}
+        <SidebarGroup>
+          <SidebarGroupLabel className="uppercase text-[0.8rem] font-medium text-[hsl(var(--paybazaar-light))]/70 tracking-wide px-4 mt-3">
+            {role === "master" ? "Master Controls" : "Distributor Panel"}
           </SidebarGroupLabel>
+
           <SidebarGroupContent>
             <SidebarMenu>
-              {items.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild className="hover:bg-sidebar-accent transition-colors">
-                    <NavLink 
-                      to={item.url} 
-                      end={item.url === "/master" || item.url === "/distributor"}
-                      className="flex items-center gap-3 py-3 px-3 rounded-lg text-sidebar-foreground"
-                      activeClassName="bg-sidebar-accent text-sidebar-primary font-semibold border-l-4 border-sidebar-primary"
-                    >
-                      <item.icon className="w-5 h-5 flex-shrink-0" />
-                      {!isCollapsed && <span>{item.title}</span>}
-                      {!isCollapsed && <ChevronRight className="w-4 h-4 ml-auto opacity-0 group-hover:opacity-100 transition-opacity" />}
-                    </NavLink>
-                  </SidebarMenuButton>
+              {navItems.map((item) => (
+                <SidebarMenuItem key={item.href}>
+                  <NavLink
+                    to={item.href}
+                    className={getNavClassName}
+                    end={item.href === "/master" || item.href === "/distributor"}
+                  >
+                    <item.icon className="h-4 w-4 shrink-0" />
+                    {!isCollapsed && <span>{item.title}</span>}
+                  </NavLink>
                 </SidebarMenuItem>
               ))}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
+
+        {/* User Info Section */}
+        {!isCollapsed && (
+          <SidebarGroup className="mt-auto">
+            <div className="border-t border-[hsl(var(--sidebar-border))] p-4">
+              <div className="flex items-center gap-3">
+                <div className="h-8 w-8 rounded-full bg-[hsl(var(--paybazaar-blue))] flex items-center justify-center shadow-[0_0_12px_hsl(var(--paybazaar-blue)/0.4)]">
+                  <span className="text-sm font-medium text-white">
+                    {role === "master" ? "MD" : "DR"}
+                  </span>
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-medium text-white truncate">
+                    {role === "master" ? "Master Distributor" : "Distributor"}
+                  </p>
+                  <p className="text-xs text-[hsl(var(--paybazaar-light))]/60 truncate">
+                    {role === "master" ? "Admin Access" : "User Access"}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </SidebarGroup>
+        )}
       </SidebarContent>
     </Sidebar>
-  );
+  )
 }

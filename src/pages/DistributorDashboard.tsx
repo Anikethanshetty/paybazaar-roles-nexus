@@ -100,7 +100,6 @@ const DistributorDashboard = () => {
                 <CardTitle className="text-sm font-medium text-muted-foreground">
                   {stat.title}
                 </CardTitle>
-                <stat.icon className={`w-5 h-5 ${stat.color}`} />
               </CardHeader>
               <CardContent>
                 <div className="text-3xl font-heading font-bold">
@@ -120,22 +119,22 @@ const DistributorDashboard = () => {
           </CardHeader>
           <CardContent>
             <div className="rounded-lg border border-border overflow-hidden">
-              <Table className="w-full border-separate border-spacing-y-1">
+              <Table className="w-full  ">
                 <TableHeader>
                   <TableRow className="bg-muted/50">
-                    <TableHead className="font-semibold text-center">
+                    <TableHead className="font-semibold text-center text-gradient-primary">
                       Name
                     </TableHead>
-                    <TableHead className="font-semibold text-center">
+                    <TableHead className="font-semibold text-center text-gradient-primary">
                       Email
                     </TableHead>
-                    <TableHead className="font-semibold text-center">
+                    <TableHead className="font-semibold text-center text-gradient-primary">
                       Phone
                     </TableHead>
-                    <TableHead className="font-semibold text-center">
+                    <TableHead className="font-semibold text-center text-gradient-primary">
                       Sales
                     </TableHead>
-                    <TableHead className="font-semibold text-center">
+                    <TableHead className="font-semibold text-center text-gradient-primary">
                       Joined
                     </TableHead>
                   </TableRow>
@@ -145,11 +144,9 @@ const DistributorDashboard = () => {
                   {retailers.map((retailer, index) => (
                     <TableRow
                       key={retailer.id}
-                      className={`${
-                        index % 2 === 0 ? "bg-background" : "bg-muted/30"
-                      } hover:bg-muted/50 transition-colors duration-200`}
+                      className={` hover:bg-muted/50 transition-colors duration-200`}
                     >
-                      <TableCell className="font-medium text-center py-3">
+                      <TableCell className="font-medium text-center py-3 text-muted-foreground">
                         {retailer.name}
                       </TableCell>
                       <TableCell className="text-muted-foreground text-center py-3">
@@ -158,7 +155,7 @@ const DistributorDashboard = () => {
                       <TableCell className="text-muted-foreground text-center py-3">
                         {retailer.phone}
                       </TableCell>
-                      <TableCell className="font-semibold text-primary text-center py-3">
+                      <TableCell className="font-semibold text-muted-foreground text-center py-3">
                         ₹{retailer.sales.toLocaleString("en-IN")}
                       </TableCell>
                       <TableCell className="text-muted-foreground text-center py-3">
